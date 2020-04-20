@@ -1,0 +1,14 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: demo-frontend
+spec:
+  template:
+    spec:
+      containers:
+      - image: happycloudpak/knative-demo-frontend
+        env:
+        - name: APP_PORT
+          value: "8080"
+        - name: APP_REST_SERVER
+          value: http://demo-backend.az-workload-general.apps.hcp.skcloud.io
