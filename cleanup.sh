@@ -13,9 +13,5 @@ oc delete -f serverless/demo-frontend.yaml
 oc delete -f wordpress/mysql.yaml
 oc delete -f wordpress/wordpress.yaml 
 
-# helm 
-./helm delete mynginx 
-./helm delete mymongo 
-
 echo "############# Finished to clearup ! ##############"
 

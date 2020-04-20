@@ -13,9 +13,5 @@ oc apply -f serverless/demo-frontend.yaml
 oc apply -f wordpress/mysql.yaml
 oc apply -f wordpress/wordpress.yaml 
 
-# helm 
-./helm install mynginx -f nginx-values.yaml bitnami/mynginx -n $NS 
-./helm install mymongo -f mongo-values.yaml bitnami/mongodb -n $NS  
-
 echo "############# Finished to install ! ##############"
 
