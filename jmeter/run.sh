@@ -1,10 +1,9 @@
 #!/bin/bash
-
 # === set below parameters ========
-export MASTER_POD="jmeter-distributed-jmeter-master-54c678bf88-vbr5n"
+export MASTER_POD="jmeter-distributed-jmeter-master-54c678bf88-92lnp"
 # To get: $ kubectl describe pod -l app.kubernetes.io/component=server | grep IP:
-export SLAVE_IP="10.129.3.22:1099,10.129.5.97:1099,10.130.4.219:1099"
-export JMX_FILE="./nftest.jmx"
+export SLAVE_IP="10.129.5.20:1099,10.128.3.0:1099"
+export JMX_FILE="./wordpress4hpa.jmx"
 export OUTPUT_FILE="jmeter.jtl"
 # =================================
 
