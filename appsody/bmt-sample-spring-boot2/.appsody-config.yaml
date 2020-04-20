@@ -1,0 +1,2 @@
+project-name: bmt-sample-spring-boot2
+stack: docker.io/icp4a/icp4a-spring-boot2:1.0

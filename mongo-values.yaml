@@ -1,0 +1,51 @@
+
+## MongoDB admin password
+## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+##
+mongodbRootPassword: passw0rd
+
+## MongoDB custom user and database
+## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+##
+mongodbUsername: admin
+mongodbPassword: passw0rd
+mongodbDatabase: default
+
+useStatefulSet: false
+
+replicaSet:
+  ## Whether to create a MongoDB replica set for high availability or not
+  enabled: true
+  ## Name of the replica set
+  ##
+  name: rs0
+  secondary: 1
+  arbiter: 1
+
+securityContext:
+  enabled: false
+  
+persistence:
+  enabled: true
+  mountPath: /bitnami/mongodb
+  subPath: ""
+  storageClass: "managed-nfs-storage-retain"
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: release
+          operator: In
+          values:
+          - mymongo
+        - key: component
+          operator: NotIn
+          values:
+          - arbiter
+      topologyKey: kubernetes.io/hostname
+

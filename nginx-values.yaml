@@ -1,0 +1,14 @@
+
+replicaCount: 3
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/instance
+          operator: In
+          values: 
+          - mynginx
+      topologyKey: kubernetes.io/hostname
+

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mvp-sample-front
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      appname: mvp-sample-front
+  template:
+    metadata:
+      name: mvp-sample-front
+      labels:
+        appname: mvp-sample-front
+    spec:
+      containers:
+      - name: container1
+        image: docker.io/happycloudpak/mvp-sample-front:1.0.0
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 10001
+        env: 
+          - name: PORT
+            value: "8080"
+        livenessProbe:
+          exec:
+            command:
+              - cat
+              - health/live.txt
+          initialDelaySeconds: 5
+          periodSeconds: 5            
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5          
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 50m
+            memory: 100Mi          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mvp-sample-front
+spec:
+  type: ClusterIP
+  selector:
+    appname: mvp-sample-front
+  ports:
+    - name: port-mvp-sample-front
+      port: 8080
+      targetPort: 8080

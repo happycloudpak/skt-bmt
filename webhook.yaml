@@ -1,0 +1,80 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  annotations:
+    manifestival: new
+  name: bitbucket-binding
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: gitrevision
+      value: $(body.changes[0].toHash)
+    - name: gitrepositoryurl
+      value: $(body.repository.links.clone[0].href)
+      #value: "http://bit.hcp.darumtech.net:7990/scm/hcp/bmt-sample-spring-boot2.git"
+    - name: docker-tag
+      value: $(body.repository.name):$(body.changes[0].toHash)
+    - name: event-type
+      value: "push" #$(header.X-Github-Event)
+    - name: event-ref
+      value: "refs/heads/master" #$(header.X-Github-Event)
+    - name: webhooks-tekton-git-branch
+      value: "master" #$(body.webhooks-tekton-git-branch)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: bitbucket-eventlistener
+  namespace: tekton-pipelines
+spec:
+  serviceAccountName: tekton-webhooks-extension-eventlistener
+  triggers:
+    # - bindings:
+    #     - apiversion: v1alpha1
+    #       name: bitbucket-binding
+    #     - apiversion: v1alpha1
+    #       name: wext-java-sody-binding
+    #   name: java-sody-kabanero-build-event
+    #   template:
+    #     apiversion: v1alpha1
+    #     name: java-spring-boot2-build-pl-template
+    - bindings:
+        - apiversion: v1alpha1
+          name: bitbucket-binding
+        - apiversion: v1alpha1
+          name: bmt-sample-spring-boot2-binding
+      name: bmt-sample-spring-boot2-build-deploy-event
+      template:
+        apiversion: v1alpha1
+        name: java-spring-boot2-build-deploy-pl-template
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  generateName: bmt-sample-spring-boot2-binding
+  generation: 1
+  name: bmt-sample-spring-boot2-binding
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: webhooks-tekton-release-name
+      value: bmt-sample-spring-boot2
+    - name: webhooks-tekton-target-namespace
+      value: kabanero
+    - name: webhooks-tekton-service-account
+      value: kabanero-operator
+    - name: webhooks-tekton-git-server
+      value: bit.hcp.darumtech.net
+    - name: webhooks-tekton-git-org
+      value: hcp
+    - name: webhooks-tekton-git-repo
+      value: bmt-sample-spring-boot2
+    - name: webhooks-tekton-pull-task
+      value: monitor-task
+    - name: webhooks-tekton-ssl-verify
+      value: "false"
+    - name: webhooks-tekton-insecure-skip-tls-verify
+      value: "true"
+    - name: webhooks-tekton-docker-registry
+      value: image-registry.openshift-image-registry.svc:5000/bmt-workload
+

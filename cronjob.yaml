@@ -1,0 +1,20 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: pi-cronjob
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template: 
+        metadata: 
+          name: pi
+          labels: 
+            app: pi 
+        spec: 
+          containers:
+          - name: pi
+            image: perl
+            command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(1000)"]
+          restartPolicy: Never
+          backoffLimit: 4
