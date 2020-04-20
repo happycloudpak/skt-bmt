@@ -10,7 +10,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: managed-nfs-storage-retain
+  storageClassName: managed-nfs-storage
   volumeMode: Filesystem
 ---
 apiVersion: v1
@@ -25,7 +25,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: managed-nfs-storage-retain
+  storageClassName: managed-nfs-storage
   volumeMode: Filesystem
 ---
 apiVersion: apps/v1
